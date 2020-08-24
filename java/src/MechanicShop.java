@@ -411,7 +411,26 @@ public class MechanicShop{
 	}
 	
 	public static void CloseServiceRequest(MechanicShop esql) throws Exception{//5
+		String date, comment;
+		int rid, mid, bill;
 		
+		try{
+			System.out.println("Enter Service Request ID:");
+			rid = getInt();
+			System.out.println("Enter Mechanic ID:");
+			mid = getInt();
+			System.out.println("Enter Close Date(yyyy-MM-dd):");
+			date = in.readLine();
+			System.out.println("Enter Close Comment:");
+			comment = in.readLine();
+			System.out.println("Enter Close Bill:");
+			bill = getInt();
+			String query = "INSERT INTO closed_request VALUES("+rid+", "+rid+", "+mid+", '"+date+"', '"+comment+"', "+bill+")";
+			System.out.println(query);
+			esql.executeUpdate(query);
+		}catch(Exception e){
+			System.err.println (e.getMessage());
+		}
 	}
 	
 	public static void ListCustomersWithBillLessThan100(MechanicShop esql){//6
