@@ -386,7 +386,28 @@ public class MechanicShop{
 	}
 	
 	public static void InsertServiceRequest(MechanicShop esql){//4
+		String car_vin, date, complain;
+		int rid, customer_id, odemeter;
 		
+		try{
+			System.out.println("Enter Service Request ID:");
+			rid = getInt();
+			System.out.println("Enter Customer ID:");
+			customer_id = getInt();
+			System.out.println("Enter Car VIN:");
+			car_vin = in.readLine();
+			System.out.println("Enter Service Date(yyyy-MM-dd):");
+			date = in.readLine();
+			System.out.println("Enter Service Odometer:");
+			odemeter = getInt();
+			System.out.println("Enter Service Complain:");
+			complain = in.readLine();
+			String query = "INSERT INTO service_request VALUES("+rid+", "+customer_id+", '"+car_vin+"', '"+date+"', "+odemeter+", '"+complain+"')";
+			System.out.println(query);
+			esql.executeUpdate(query);
+		}catch(Exception e){
+			System.err.println (e.getMessage());
+		}
 	}
 	
 	public static void CloseServiceRequest(MechanicShop esql) throws Exception{//5
