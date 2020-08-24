@@ -303,17 +303,86 @@ public class MechanicShop{
 		}while (true);
 		return input;
 	}//end readChoice
+
+	public static int getInt() {
+		int input;
+
+		do {
+			try{
+				input = Integer.parseInt(in.readLine());
+				break;
+			}catch (Exception e){
+				System.out.println("Your input was invalid!");
+				continue;
+			}
+		}while(true);
+		return input;
+	}
 	
 	public static void AddCustomer(MechanicShop esql){//1
+		String fname, lname, phone, address;
+		int id;
 		
+		try{
+			System.out.println("Enter Customer ID:");
+			id = getInt();
+			System.out.println("Enter first name:");
+			fname = in.readLine();
+			System.out.println("Enter last name:");
+			lname = in.readLine();
+			System.out.println("Enter phone number:");
+			phone = in.readLine();
+			System.out.println("Enter address number:");
+			address = in.readLine();
+			String query = "INSERT INTO customer VALUES("+id+", '"+fname+"', '"+lname+"', '"+phone+"', '"+address+"')";
+			System.out.println(query);
+			esql.executeUpdate(query);
+		}catch(Exception e){
+			System.err.println (e.getMessage());
+		}
 	}
 	
 	public static void AddMechanic(MechanicShop esql){//2
+		String fname, lname, experience;
+		int id;
+		
+		try{
+			System.out.println("Enter Mechanic ID:");
+			id = getInt();
+			System.out.println("Enter first name:");
+			fname = in.readLine();
+			System.out.println("Enter last name:");
+			lname = in.readLine();
+			System.out.println("Enter experience:");
+			experience = in.readLine();
+			String query = "INSERT INTO mechanic VALUES("+id+", '"+fname+"', '"+lname+"', '"+experience+"')";
+			System.out.println(query);
+			esql.executeUpdate(query);
+		}catch(Exception e){
+			System.err.println (e.getMessage());
+		}
 		
 	}
-	
+	   
 	public static void AddCar(MechanicShop esql){//3
+		String vin, make, model;
+		int year;
 		
+		try{
+			System.out.println("Enter Car vin:");
+			vin = in.readLine();
+			System.out.println("Enter Car make:");
+			make = in.readLine();
+			System.out.println("Enter Car model:");
+			model = in.readLine();
+			System.out.println("Enter Car year:");
+			year = getInt();
+			String query = "INSERT INTO car VALUES('"+vin+"', '"+make+"', '"+model+"', '"+year+"')";
+			System.out.println(query);
+			esql.executeUpdate(query);
+		}catch(Exception e){
+			System.err.println (e.getMessage());
+		}
 	}
 	
 	public static void InsertServiceRequest(MechanicShop esql){//4
@@ -337,12 +406,10 @@ public class MechanicShop{
 	}
 	
 	public static void ListKCarsWithTheMostServices(MechanicShop esql){//9
-		//
 		
 	}
 	
 	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//9
-		//
 		
 	}
 	
