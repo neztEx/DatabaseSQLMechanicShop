@@ -305,6 +305,7 @@ public class MechanicShop{
 	}//end readChoice
 
 	public static int getInt() {
+		//completed by SamT
 		int input;
 
 		do {
@@ -320,6 +321,7 @@ public class MechanicShop{
 	}
 	
 	public static void AddCustomer(MechanicShop esql){//1
+		//completed by SamT
 		String fname, lname, phone, address;
 		int id;
 		
@@ -343,6 +345,7 @@ public class MechanicShop{
 	}
 	
 	public static void AddMechanic(MechanicShop esql){//2
+		//completed by SamT
 		String fname, lname, experience;
 		int id;
 		
@@ -365,6 +368,7 @@ public class MechanicShop{
 	}
 	   
 	public static void AddCar(MechanicShop esql){//3
+		//completed by SamT
 		String vin, make, model;
 		int year;
 		
@@ -386,6 +390,7 @@ public class MechanicShop{
 	}
 	
 	public static void InsertServiceRequest(MechanicShop esql){//4
+		//completed by SamT
 		String car_vin, date, complain;
 		int rid, customer_id, odemeter;
 		
@@ -411,6 +416,7 @@ public class MechanicShop{
 	}
 	
 	public static void CloseServiceRequest(MechanicShop esql) throws Exception{//5
+		//completed by SamT
 		String date, comment;
 		int rid, mid, bill;
 		
