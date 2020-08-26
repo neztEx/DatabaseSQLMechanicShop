@@ -546,7 +546,7 @@ public class MechanicShop{
 			String query = "SELECT c.fname, c.lname, r.date, r.comment, r.bill " +
 							"FROM c.customer, r.closed_request " +
 	                        "WHERE r.bill < 100";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -560,7 +560,7 @@ public class MechanicShop{
 	                        "WHERE (SELECT COUNT(v.vin) " +
 	                                "FROM o.owns, v.car " +
 	                                "WHERE c.id = o.customer_id AND o.car_vin = v.vin) > 20";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -572,7 +572,7 @@ public class MechanicShop{
 		    String query = "SELECT c.make, c.model, c.year " +
 		                    "FROM c.car, r.service_request " +
 		                    "WHERE c.vin = r.car_vin AND c.year < 1995 AND r.odometer < 50000";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -590,7 +590,7 @@ public class MechanicShop{
 		    String query = "SELECT c.make, c.model, COUNT(r.service_request) " +
 		                    "FROM c.car, r.service_request " +
 		                    "WHERE ";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -602,11 +602,10 @@ public class MechanicShop{
 	        String query = "SELECT c.fname, c.lname, r.bill " +
 	                        "FROM c.customer, o.owns, v.car, r.closed_request " +
 	                        "WHERE ";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
 	}
-	
 }
 
