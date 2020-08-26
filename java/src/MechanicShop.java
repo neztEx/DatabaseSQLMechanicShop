@@ -395,6 +395,40 @@ public class MechanicShop{
 		int rid, customer_id, odemeter;
 		
 		try{
+			System.out.println("Enter Customer Last name: ");
+			String lastName = in.readLine();
+			
+			//search for customer lastName in customer table
+			String query = 	"SELECT c.lname, c.id " +
+							"FROM customer c " +
+							"WHERE c.lname = '"+lastName+"'" +
+							"GROUP BY c.id";
+			List<List<String>> result  = new ArrayList<List<String>>();
+			result = esql.executeQueryAndReturnResult(query);
+			System.out.println(result);
+			if(result.size() > 0) {
+				for(int i = 0; i < result.size(); i++){
+					System.out.println("Number: " + i + " Customer: " + result.get(i).get(i));
+				}
+				System.out.println("Please select the customer # who initiaded request: ");
+				int custNumber = getInt();
+				customer_id = Integer.parseInt(result.get(custNumber).get(1));
+				// System.out.println("CUSTOMER ID : " +customer_id);
+
+				query = "SELECT c.make, c.model, c.year, c.vin " +
+						"FROM owns o, car c " +
+						"WHERE c.vin = o.car_vin AND "+customer_id+" = o.customer_id";
+				result = esql.executeQueryAndReturnResult(query);
+				System.out.println(result);
+				for(int i = 0; i < result.size(); i++){
+					System.out.println("Car Number: " + i + " Car: " + result.get(i).get(2) + result.get(i).get(0) + result.get(i).get(1));
+				}
+				System.out.println("Please select the customer car for service: ");
+				int car = getInt();
+				car_vin = result.get(car).get(3);
+				System.out.println(car_vin);
+			}
+
 			System.out.println("Enter Service Request ID:");
 			rid = getInt();
 			System.out.println("Enter Customer ID:");
@@ -407,8 +441,8 @@ public class MechanicShop{
 			odemeter = getInt();
 			System.out.println("Enter Service Complain:");
 			complain = in.readLine();
-			String query = "INSERT INTO service_request VALUES("+rid+", "+customer_id+", '"+car_vin+"', '"+date+"', "+odemeter+", '"+complain+"')";
-			System.out.println(query);
+			String queryInsert = "INSERT INTO service_request VALUES("+rid+", "+customer_id+", '"+car_vin+"', '"+date+"', "+odemeter+", '"+complain+"')";
+			System.out.println(queryInsert);
 			esql.executeUpdate(query);
 		}catch(Exception e){
 			System.err.println (e.getMessage());
