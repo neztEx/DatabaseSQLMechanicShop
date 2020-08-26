@@ -260,9 +260,9 @@ public class MechanicShop{
 				 * FOLLOW THE SPECIFICATION IN THE PROJECT DESCRIPTION
 				 */
 				switch (readChoice()){
-					case 1: AddCustomer(esql); break;
+					case 1: AddCustomer(esql, null); break;
 					case 2: AddMechanic(esql); break;
-					case 3: AddCar(esql); break;
+					case 3: AddCar(esql, null); break;
 					case 4: InsertServiceRequest(esql); break;
 					case 5: CloseServiceRequest(esql); break;
 					case 6: ListCustomersWithBillLessThan100(esql); break;
@@ -320,23 +320,30 @@ public class MechanicShop{
 		return input;
 	}
 	
-	public static void AddCustomer(MechanicShop esql){//1
+	public static void AddCustomer(MechanicShop esql, String lname){//1
 		//completed by SamT
-		String fname, lname, phone, address;
+		String fname, phone, address;
 		int id;
-		
+		String query;
+		List<List<String>> result  = new ArrayList<List<String>>();
 		try{
-			System.out.println("Enter Customer ID:");
-			id = getInt();
+			query = "SELECT COUNT(id) "+
+					"FROM customer";
+			result = esql.executeQueryAndReturnResult(query);
+			id = Integer.parseInt(result.get(0).get(0));
+			// System.out.println("Enter Customer ID:");
+			// id = getInt();
 			System.out.println("Enter first name:");
 			fname = in.readLine();
-			System.out.println("Enter last name:");
-			lname = in.readLine();
+			if(lname == null){
+				System.out.println("Enter last name:");
+				lname = in.readLine();
+			}
 			System.out.println("Enter phone number:");
 			phone = in.readLine();
 			System.out.println("Enter address number:");
 			address = in.readLine();
-			String query = "INSERT INTO customer VALUES("+id+", '"+fname+"', '"+lname+"', '"+phone+"', '"+address+"')";
+			query = "INSERT INTO customer VALUES("+id+", '"+fname+"', '"+lname+"', '"+phone+"', '"+address+"')";
 			System.out.println(query);
 			esql.executeUpdate(query);
 		}catch(Exception e){
@@ -367,14 +374,16 @@ public class MechanicShop{
 		
 	}
 	   
-	public static void AddCar(MechanicShop esql){//3
+	public static void AddCar(MechanicShop esql, String vin){//3
 		//completed by SamT
-		String vin, make, model;
+		String make, model;
 		int year;
 		
 		try{
-			System.out.println("Enter Car vin:");
-			vin = in.readLine();
+			if(vin == null){
+				System.out.println("Enter Car vin:");
+				vin = in.readLine();
+			}
 			System.out.println("Enter Car make:");
 			make = in.readLine();
 			System.out.println("Enter Car model:");
@@ -394,55 +403,96 @@ public class MechanicShop{
 		String car_vin, date, complain;
 		int rid, customer_id, odemeter;
 		
+		String query;
+		List<List<String>> result  = new ArrayList<List<String>>();
 		try{
+			// query = "SELECT COUNT(ownership_id) "+
+			// 				"FROM owns";
+			// result = esql.executeQueryAndReturnResult(query);
+			// int test = Integer.parseInt(result.get(0).get(0));
+			// System.out.println(test);
 			System.out.println("Enter Customer Last name: ");
 			String lastName = in.readLine();
 			
-			//search for customer lastName in customer table
-			String query = 	"SELECT c.lname, c.id " +
-							"FROM customer c " +
-							"WHERE c.lname = '"+lastName+"'" +
-							"GROUP BY c.id";
-			List<List<String>> result  = new ArrayList<List<String>>();
-			result = esql.executeQueryAndReturnResult(query);
-			System.out.println(result);
-			if(result.size() > 0) {
-				for(int i = 0; i < result.size(); i++){
-					System.out.println("Number: " + i + " Customer: " + result.get(i).get(i));
+			while(true){
+				//search for customer lastName in customer table
+				query = 	"SELECT c.lname, c.id, c.fname " +
+								"FROM customer c " +
+								"WHERE c.lname = '"+lastName+"'" +
+								"GROUP BY c.id";
+				result = esql.executeQueryAndReturnResult(query);
+				// System.out.println(result);
+	
+				//if customer is found  search for customer cars
+				if(result.size() == 0) {
+					System.out.println("Customer "+lastName+" not found...creating customer");
+					AddCustomer(esql, lastName);
+				}else if(result.size() == 1){
+					customer_id = Integer.parseInt(result.get(0).get(1));
+					break;
+				}else{
+					System.out.println("Listing customers...");
+					for(int i = 0; i < result.size(); i++){
+						System.out.println("Number: " + i + " Customer: " + result.get(i).get(2).trim() +" "+ result.get(i).get(0).trim());
+					}
+					System.out.println("Please select the customer # who initiaded request: ");
+					int custNumber = getInt();
+					customer_id = Integer.parseInt(result.get(custNumber).get(1));
+					break;
 				}
-				System.out.println("Please select the customer # who initiaded request: ");
-				int custNumber = getInt();
-				customer_id = Integer.parseInt(result.get(custNumber).get(1));
-				// System.out.println("CUSTOMER ID : " +customer_id);
+			}
+			// System.out.println("CUSTOMER ID : " +customer_id);
 
+			while(true){
 				query = "SELECT c.make, c.model, c.year, c.vin " +
 						"FROM owns o, car c " +
 						"WHERE c.vin = o.car_vin AND "+customer_id+" = o.customer_id";
 				result = esql.executeQueryAndReturnResult(query);
-				System.out.println(result);
-				for(int i = 0; i < result.size(); i++){
-					System.out.println("Car Number: " + i + " Car: " + result.get(i).get(2) + result.get(i).get(0) + result.get(i).get(1));
+				// System.out.println(result);
+				
+				//checks if customer has any cars, if not add a car to customer
+				if(result.size() == 0){
+					System.out.println("No cars found...adding car to customer");
+					System.out.println("Enter Car vin:");
+					car_vin = in.readLine();
+					AddCar(esql, car_vin);
+					query = "SELECT COUNT(ownership_id) "+
+							"FROM owns";
+					result = esql.executeQueryAndReturnResult(query);
+					int ownership_id = Integer.parseInt(result.get(0).get(0));
+					System.out.println(ownership_id);
+					query = "INSERT INTO owns VALUES("+ownership_id+","+customer_id+",'"+car_vin+"')";
+					esql.executeUpdate(query);
+					break;
+				}else{
+					System.out.println("Listing cars...");
+					for(int i = 0; i < result.size(); i++){
+						System.out.println("Car Number: " + i + " Car: " + result.get(i).get(2) +" "+ result.get(i).get(0) +" "+ result.get(i).get(1));
+					}
+					System.out.println("Please select the customer car for service: ");
+					int car = getInt();
+					car_vin = result.get(car).get(3);
+					// System.out.println(car_vin);]
+					break;
 				}
-				System.out.println("Please select the customer car for service: ");
-				int car = getInt();
-				car_vin = result.get(car).get(3);
-				System.out.println(car_vin);
 			}
-
-			System.out.println("Enter Service Request ID:");
-			rid = getInt();
-			System.out.println("Enter Customer ID:");
-			customer_id = getInt();
-			System.out.println("Enter Car VIN:");
-			car_vin = in.readLine();
+			query = "SELECT COUNT(rid)"+
+					"FROM service_request";
+			result = esql.executeQueryAndReturnResult(query);
+			// System.out.println("Enter Service Request ID:");
+			rid = Integer.parseInt(result.get(0).get(0));
+			// System.out.println("Enter Customer ID:");
+			// customer_id = getInt();
+			// System.out.println("Enter Car VIN:");
+			// car_vin = in.readLine();
 			System.out.println("Enter Service Date(yyyy-MM-dd):");
 			date = in.readLine();
 			System.out.println("Enter Service Odometer:");
 			odemeter = getInt();
-			System.out.println("Enter Service Complain:");
+			System.out.println("Enter Service Complaint:");
 			complain = in.readLine();
-			String queryInsert = "INSERT INTO service_request VALUES("+rid+", "+customer_id+", '"+car_vin+"', '"+date+"', "+odemeter+", '"+complain+"')";
-			System.out.println(queryInsert);
+			query = "INSERT INTO service_request VALUES("+rid+", "+customer_id+", '"+car_vin+"', '"+date+"', "+odemeter+", '"+complain+"')";
+			System.out.println(query);
 			esql.executeUpdate(query);
 		}catch(Exception e){
 			System.err.println (e.getMessage());
@@ -489,7 +539,7 @@ public class MechanicShop{
 		
 	}
 	
-	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//9
+	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//10
 		
 	}
 	
