@@ -406,11 +406,7 @@ public class MechanicShop{
 		String query;
 		List<List<String>> result  = new ArrayList<List<String>>();
 		try{
-			// query = "SELECT COUNT(ownership_id) "+
-			// 				"FROM owns";
-			// result = esql.executeQueryAndReturnResult(query);
-			// int test = Integer.parseInt(result.get(0).get(0));
-			// System.out.println(test);
+			
 			System.out.println("Enter Customer Last name: ");
 			String lastName = in.readLine();
 			
@@ -503,19 +499,40 @@ public class MechanicShop{
 		//completed by SamT
 		String date, comment;
 		int rid, mid, bill;
-		
+		String query;
+		List<List<String>> result  = new ArrayList<List<String>>();
 		try{
-			System.out.println("Enter Service Request ID:");
-			rid = getInt();
-			System.out.println("Enter Mechanic ID:");
-			mid = getInt();
+			while(true){
+				System.out.println("Enter Service Request ID:");
+				rid = getInt();
+				query = "SELECT s.rid " +
+						"FROM service_request s "+
+						"WHERE s.rid ="+rid;
+				result =  esql.executeQueryAndReturnResult(query);
+				if(result.size() > 0){
+					break;
+				}
+				System.out.println("ID not found...");
+			}
+			while(true){
+				System.out.println("Enter Mechanic ID:");
+				mid = getInt();
+				query = "SELECT id " +
+						"FROM mechanic "+
+						"WHERE id ="+mid;
+				result =  esql.executeQueryAndReturnResult(query);
+				if(result.size() > 0){
+					break;
+				}
+				System.out.println("ID not found...");
+			}	
 			System.out.println("Enter Close Date(yyyy-MM-dd):");
 			date = in.readLine();
 			System.out.println("Enter Close Comment:");
 			comment = in.readLine();
 			System.out.println("Enter Close Bill:");
 			bill = getInt();
-			String query = "INSERT INTO closed_request VALUES("+rid+", "+rid+", "+mid+", '"+date+"', '"+comment+"', "+bill+")";
+			query = "INSERT INTO closed_request VALUES("+rid+", "+rid+", "+mid+", '"+date+"', '"+comment+"', "+bill+")";
 			System.out.println(query);
 			esql.executeUpdate(query);
 		}catch(Exception e){
