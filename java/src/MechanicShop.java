@@ -474,15 +474,25 @@ public class MechanicShop{
 	}
 	
 	public static void ListCustomersWithBillLessThan100(MechanicShop esql){//6
-		
+	    try{
+	        String query = "SELECT c.fname, c.lname, r.date, r.comment, r.bill FROM c.customer, r.closed_request WHERE r.bill < 100";
+		    esql.executeQueryAndPrintResult(query);
+        }catch(Exception e){
+			System.err.println (e.getMessage());
+		}
 	}
 	
 	public static void ListCustomersWithMoreThan20Cars(MechanicShop esql){//7
-		
+
 	}
 	
 	public static void ListCarsBefore1995With50000Milles(MechanicShop esql){//8
-		
+		try{
+		    String query = "SELECT c.make, c.model, c.year FROM c.car, r.service_request WHERE c.vin = r.car_vin AND c.year < 1995 AND r.odometer < 50000";
+		    esql.executeQueryAndPrintResult(query);
+        }catch(Exception e){
+			System.err.println (e.getMessage());
+		}
 	}
 	
 	public static void ListKCarsWithTheMostServices(MechanicShop esql){//9
