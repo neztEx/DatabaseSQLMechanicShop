@@ -508,11 +508,17 @@ public class MechanicShop{
 			while(true){
 				System.out.println("Enter Service Request ID:");
 				rid = getInt();
+				//REQUIRES INDEXING for perfomance increase	
+				query = "CREATE INDEX serviceRequestID on service_request (rid);";
+				esql.executeUpdate(query);
+				
 				query = "SELECT s.rid " +
 						"FROM service_request s "+
 						"WHERE s.rid ="+rid;
 				result =  esql.executeQueryAndReturnResult(query);
 				if(result.size() > 0){
+					query = "DROP INDEX serviceRequestID";
+					esql.executeUpdate(query);
 					break;
 				}
 				System.out.println("ID not found...");
