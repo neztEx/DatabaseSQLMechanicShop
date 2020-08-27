@@ -601,11 +601,11 @@ public class MechanicShop{
 		    System.out.println("Enter the Highest Amount of Service Requests (Amount > 0):");
 			k = getInt();
 
-		    String query = "SELECT c.make, c.model, COUNT(r.rid) cn " +
+		    String query = "SELECT c.make, c.model, COUNT(r.rid) cnt " +
 		                    "FROM car c, service_request r " +
 		                    "WHERE c.vin = r.car_vin " +
 		                    "GROUP BY c.make, c.model " +
-		                    "ORDER BY cn DESC " +
+		                    "ORDER BY cnt DESC " +
 		                    "LIMIT " + k + " ";
 		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
 		    for(int i = 0; i < result.size(); i++){
