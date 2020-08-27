@@ -546,10 +546,10 @@ public class MechanicShop{
 	public static void ListCustomersWithBillLessThan100(MechanicShop esql){//6
 	    //completed by CristinaL
 	    try{
-			String query = "SELECT c.fname, c.lname, r.date, r.comment, r.bill "+
-							"FROM c.customer, r.closed_request "+
+			String query = "SELECT c.fname, c.lname, r.date, r.comment, r.bill " +
+							"FROM c.customer, r.closed_request " +
 	                        "WHERE r.bill < 100";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -558,12 +558,12 @@ public class MechanicShop{
 	public static void ListCustomersWithMoreThan20Cars(MechanicShop esql){//7
         //completed by CristinaL
 	    try{
-	        String query = "SELECT c.fname, c.lname "+
-	                        "FROM c.customer "+
-	                        "WHERE (SELECT COUNT(v.vin) "+
-	                                "FROM o.owns, v.car "+
+	        String query = "SELECT c.fname, c.lname " +
+	                        "FROM c.customer " +
+	                        "WHERE (SELECT COUNT(v.vin) " +
+	                                "FROM o.owns, v.car " +
 	                                "WHERE c.id = o.customer_id AND o.car_vin = v.vin) > 20";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -575,14 +575,28 @@ public class MechanicShop{
 		    String query = "SELECT c.make, c.model, c.year " +
 		                    "FROM c.car, r.service_request " +
 		                    "WHERE c.vin = r.car_vin AND c.year < 1995 AND r.odometer < 50000";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
 	}
 	
 	public static void ListKCarsWithTheMostServices(MechanicShop esql){//9
-		
+		//completed by CristinaL
+        //WIP
+		int k;
+
+		try{
+		    System.out.println("Enter the Highest Amount of Service Requests (Amount > 0):");
+			k = getInt();
+
+		    String query = "SELECT c.make, c.model, COUNT(r.service_request) " +
+		                    "FROM c.car, r.service_request " +
+		                    "WHERE ";
+		    esql.executeQueryAndReturnResult(query);
+        }catch(Exception e){
+			System.err.println (e.getMessage());
+		}
 	}
 	
 	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//9
@@ -591,10 +605,10 @@ public class MechanicShop{
 	        String query = "SELECT c.fname, c.lname, r.bill " +
 	                        "FROM c.customer, o.owns, v.car, r.closed_request " +
 	                        "WHERE ";
-		    esql.executeQueryAndPrintResult(query);
+		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
 	}
-	
 }
+
