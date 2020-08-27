@@ -549,7 +549,8 @@ public class MechanicShop{
 			String query = "SELECT c.fname, c.lname, r.date, r.comment, r.bill " +
 							"FROM customer c, closed_request r " +
 	                        "WHERE r.bill < 100";
-		    esql.executeQueryAndReturnResult(query);
+		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
+		    System.out.println(results);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -563,7 +564,8 @@ public class MechanicShop{
 	                        "WHERE (SELECT COUNT(v.vin) " +
 	                                "FROM owns o, car v " +
 	                                "WHERE c.id = o.customer_id AND o.car_vin = v.vin) > 20";
-		    esql.executeQueryAndReturnResult(query);
+		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
+		    System.out.println(results);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -575,7 +577,8 @@ public class MechanicShop{
 		    String query = "SELECT c.make, c.model, c.year " +
 		                    "FROM car c, service_request r " +
 		                    "WHERE c.vin = r.car_vin AND c.year < 1995 AND r.odometer < 50000";
-		    esql.executeQueryAndReturnResult(query);
+		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
+		    System.out.println(results);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -593,7 +596,8 @@ public class MechanicShop{
 		    String query = "SELECT c.make, c.model, COUNT(r.service_request) " +
 		                    "FROM car c, service_request r" +
 		                    "WHERE ";
-		    esql.executeQueryAndReturnResult(query);
+		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
+		    System.out.println(results);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -605,7 +609,8 @@ public class MechanicShop{
 	        String query = "SELECT c.fname, c.lname, r.bill " +
 	                        "FROM customer c, owns o, car v, closed_request r " +
 	                        "WHERE ";
-		    esql.executeQueryAndReturnResult(query);
+		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
+		    System.out.println(results);
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
