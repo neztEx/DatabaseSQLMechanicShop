@@ -327,6 +327,7 @@ public class MechanicShop{
 		String query;
 		List<List<String>> result  = new ArrayList<List<String>>();
 		try{
+			System.out.println("--------Add Customer--------");
 			query = "SELECT COUNT(id) "+
 					"FROM customer";
 			result = esql.executeQueryAndReturnResult(query);
@@ -355,8 +356,8 @@ public class MechanicShop{
 		//completed by SamT
 		String fname, lname, experience;
 		int id;
-		
 		try{
+			System.out.println("--------Add Mechanic--------");
 			System.out.println("Enter Mechanic ID:");
 			id = getInt();
 			System.out.println("Enter first name:");
@@ -380,6 +381,7 @@ public class MechanicShop{
 		int year;
 		
 		try{
+			System.out.println("--------Add Car--------");
 			if(vin == null){
 				System.out.println("Enter Car vin:");
 				vin = in.readLine();
@@ -406,7 +408,7 @@ public class MechanicShop{
 		String query;
 		List<List<String>> result  = new ArrayList<List<String>>();
 		try{
-			
+			System.out.println("--------Insert Service Request--------");
 			System.out.println("Enter Customer Last name: ");
 			String lastName = in.readLine();
 			
@@ -502,6 +504,7 @@ public class MechanicShop{
 		String query;
 		List<List<String>> result  = new ArrayList<List<String>>();
 		try{
+			System.out.println("--------Close Service Request--------");
 			while(true){
 				System.out.println("Enter Service Request ID:");
 				rid = getInt();
