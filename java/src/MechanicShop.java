@@ -579,6 +579,7 @@ public class MechanicShop{
 	
 	public static void ListCarsBefore1995With50000Milles(MechanicShop esql){//8
 	    //completed by CristinaL
+
 		try{
 		    String query = "SELECT c.make, c.model, c.year " +
 		                    "FROM car c, service_request r " +
@@ -594,7 +595,7 @@ public class MechanicShop{
 	
 	public static void ListKCarsWithTheMostServices(MechanicShop esql){//9
 		//completed by CristinaL
-        //WIP
+
 		int k;
 
 		try{
@@ -618,14 +619,16 @@ public class MechanicShop{
 	
 	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//9
 		//completed by CristinaL
+
 	    try{
-	        String query = "SELECT c.fname, c.lname, SUM(r.bill) " +
-	                        "FROM customer c, owns o, closed_request r, service_request s " +
-	                        "ORDER BY SUM(r.bill) DESC " +
-	                        "WHERE s.customer_id = c.id AND r.rid = s.rid AND o.customer_id = c.id ";
+	        String query = "SELECT c.fname, c.lname, SUM(r.bill) bill " +
+	                        "FROM customer c, owns o, car v, closed_request r, service_request s " +
+	                        "WHERE c.id = o.customer_id AND o.car_vin = v.vin AND v.vin = s.car_vin AND r.rid = s.rid " +
+	                        "GROUP BY c.fname, c.lname " +
+	                        "ORDER BY bill DESC ";
 		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
 		    for(int i = 0; i < result.size(); i++){
-						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim() +" \t"+ result.get(i).get(1));
+						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim() +" \t"+ result.get(i).get(2));
 			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
