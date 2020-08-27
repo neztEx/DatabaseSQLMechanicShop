@@ -547,7 +547,7 @@ public class MechanicShop{
 	    //completed by CristinaL
 	    try{
 			String query = "SELECT c.fname, c.lname, r.date, r.comment, r.bill " +
-							"FROM c.customer, r.closed_request " +
+							"FROM customer c, closed_request r " +
 	                        "WHERE r.bill < 100";
 		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
@@ -559,9 +559,9 @@ public class MechanicShop{
         //completed by CristinaL
 	    try{
 	        String query = "SELECT c.fname, c.lname " +
-	                        "FROM c.customer " +
+	                        "FROM customer c " +
 	                        "WHERE (SELECT COUNT(v.vin) " +
-	                                "FROM o.owns, v.car " +
+	                                "FROM owns o, car v " +
 	                                "WHERE c.id = o.customer_id AND o.car_vin = v.vin) > 20";
 		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
@@ -573,7 +573,7 @@ public class MechanicShop{
 	    //completed by CristinaL
 		try{
 		    String query = "SELECT c.make, c.model, c.year " +
-		                    "FROM c.car, r.service_request " +
+		                    "FROM car c, service_request r " +
 		                    "WHERE c.vin = r.car_vin AND c.year < 1995 AND r.odometer < 50000";
 		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
@@ -591,7 +591,7 @@ public class MechanicShop{
 			k = getInt();
 
 		    String query = "SELECT c.make, c.model, COUNT(r.service_request) " +
-		                    "FROM c.car, r.service_request " +
+		                    "FROM car c, service_request r" +
 		                    "WHERE ";
 		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
@@ -603,7 +603,7 @@ public class MechanicShop{
 		//completed by CristinaL
 	    try{
 	        String query = "SELECT c.fname, c.lname, r.bill " +
-	                        "FROM c.customer, o.owns, v.car, r.closed_request " +
+	                        "FROM customer c, owns o, car v, closed_request r " +
 	                        "WHERE ";
 		    esql.executeQueryAndReturnResult(query);
         }catch(Exception e){
