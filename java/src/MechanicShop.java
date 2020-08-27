@@ -545,12 +545,15 @@ public class MechanicShop{
 	
 	public static void ListCustomersWithBillLessThan100(MechanicShop esql){//6
 	    //completed by CristinaL
+
 	    try{
 			String query = "SELECT c.fname, c.lname, r.date, r.comment, r.bill " +
-							"FROM customer c, closed_request r " +
-	                        "WHERE r.bill < 100";
-		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
-		    System.out.println(results);
+							"FROM customer c, closed_request r, service_request s " +
+	                        "WHERE s.customer_id = c.id AND r.rid = s.rid AND r.bill < 100";
+		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
+		    for(int i = 0; i < result.size(); i++){
+						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim() +" \t"+ result.get(i).get(2) +" \t" + " Bill: "+ result.get(i).get(4) +" \t"+ result.get(i).get(3));
+			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -564,8 +567,10 @@ public class MechanicShop{
 	                        "WHERE (SELECT COUNT(v.vin) " +
 	                                "FROM owns o, car v " +
 	                                "WHERE c.id = o.customer_id AND o.car_vin = v.vin) > 20";
-		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
-		    System.out.println(results);
+		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
+		    for(int i = 0; i < result.size(); i++){
+						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim());
+			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -595,7 +600,9 @@ public class MechanicShop{
 
 		    String query = "SELECT c.make, c.model, COUNT(r.service_request) " +
 		                    "FROM car c, service_request r" +
-		                    "WHERE ";
+		                    "WHERE (SELECT COUNT() " +
+		                            "FROM " +
+		                            "WHERE )";
 		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
 		    System.out.println(results);
         }catch(Exception e){
