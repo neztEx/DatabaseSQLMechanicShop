@@ -552,7 +552,7 @@ public class MechanicShop{
 	                        "WHERE s.customer_id = c.id AND r.rid = s.rid AND r.bill < 100";
 		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
 		    for(int i = 0; i < result.size(); i++){
-						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim() +" \t"+ result.get(i).get(2) +" \t" + " Bill: "+ result.get(i).get(4) +" \t"+ result.get(i).get(3));
+						System.out.printf("%-22s%-22s%-22s%-22s%-22s\n", result.get(i).get(0), result.get(i).get(1), result.get(i).get(2), result.get(i).get(4), result.get(i).get(3));
 			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
@@ -570,7 +570,7 @@ public class MechanicShop{
 	                                "WHERE c.id = o.customer_id AND o.car_vin = v.vin) > 20";
 		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
 		    for(int i = 0; i < result.size(); i++){
-						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim());
+						System.out.printf("%-22s%-22s\n", result.get(i).get(0), result.get(i).get(1));
 			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
@@ -586,7 +586,7 @@ public class MechanicShop{
 		                    "WHERE c.vin = r.car_vin AND c.year < 1995 AND r.odometer < 50000";
 		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
 		    for(int i = 0; i < result.size(); i++){
-						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim() +" \t"+ result.get(i).get(2));
+						System.out.printf("%-22s%-22s%-22s\n", result.get(i).get(0), result.get(i).get(1), result.get(i).get(2));
 			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
@@ -610,7 +610,7 @@ public class MechanicShop{
 		                    "LIMIT " + k + " ";
 		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
 		    for(int i = 0; i < result.size(); i++){
-						System.out.println(result.get(i).get(0) +" \t"+ result.get(i).get(1) +" \t"+ result.get(i).get(2));
+						System.out.printf("%-22s%-22s%-22s\n", result.get(i).get(0), result.get(i).get(1), result.get(i).get(2));
 			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
@@ -628,7 +628,7 @@ public class MechanicShop{
 	                        "ORDER BY bill DESC ";
 		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
 		    for(int i = 0; i < result.size(); i++){
-						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim() +" \t"+ result.get(i).get(2));
+						System.out.printf("%-22s%-22s%-22s\n", result.get(i).get(0), result.get(i).get(1), result.get(i).get(2));
 			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
