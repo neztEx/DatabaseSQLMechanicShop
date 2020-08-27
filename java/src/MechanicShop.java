@@ -556,10 +556,11 @@ public class MechanicShop{
 			String query = "SELECT c.fname, c.lname, r.date, r.comment, r.bill " +
 							"FROM customer c, closed_request r, service_request s " +
 	                        "WHERE s.customer_id = c.id AND r.rid = s.rid AND r.bill < 100";
-		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
+			List<List<String>> result = esql.executeQueryAndReturnResult(query);
+			System.out.printf("%-22s%-22s%-22s%-22s%-22s\n", "FirstName", "LastName", "Date", "Comment", "Bill");
+			System.out.println("=======================================================================");
 		    for(int i = 0; i < result.size(); i++){
-				// System.out.prinf("%-10s %-10s %-10s\n",result.get(i).get(0).trim(), result.get(i).get(1).trim(), result.get(i).get(2));		
-				System.out.println(result.get(i).get(0) + result.get(i).get(1) + " " + result.get(i).get(2) + " \t" + " Bill: "+ result.get(i).get(4) +" \t Comment: "+ result.get(i).get(3));
+						System.out.printf("%-22s%-22s%-22s%-22s%-22s\n", result.get(i).get(0).trim(), result.get(i).get(1).trim(), result.get(i).get(2), result.get(i).get(4), result.get(i).get(3));
 			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
@@ -568,16 +569,18 @@ public class MechanicShop{
 	
 	public static void ListCustomersWithMoreThan20Cars(MechanicShop esql){//7
         //completed by CristinaL
+
 	    try{
 	        String query = "SELECT c.fname, c.lname " +
 	                        "FROM customer c " +
 	                        "WHERE (SELECT COUNT(v.vin) " +
 	                                "FROM owns o, car v " +
 	                                "WHERE c.id = o.customer_id AND o.car_vin = v.vin) > 20";
-		    List<List<String>> result = esql.executeQueryAndReturnResult(query);
+			List<List<String>> result = esql.executeQueryAndReturnResult(query);
+			System.out.printf("%-22s%-22s\n", "FirstName", "LastName");
+			System.out.println("=======================================================================");
 		    for(int i = 0; i < result.size(); i++){
-						
-						System.out.println(result.get(i).get(0).trim() +" \t"+ result.get(i).get(1).trim());
+						System.out.printf("%-22s%-22s\n", result.get(i).get(0).trim(), result.get(i).get(1).trim());
 			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
@@ -586,12 +589,17 @@ public class MechanicShop{
 	
 	public static void ListCarsBefore1995With50000Milles(MechanicShop esql){//8
 	    //completed by CristinaL
+
 		try{
 		    String query = "SELECT DISTINCT c.make, c.model, c.year " +
 		                    "FROM car c, service_request r " +
 		                    "WHERE c.vin = r.car_vin AND c.year < 1995 AND r.odometer < 50000";
-		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
-		    System.out.println(results);
+			List<List<String>> result = esql.executeQueryAndReturnResult(query);
+			System.out.printf("%-22s%-22s%-22s\n", "Make", "Model", "Year");
+			System.out.println("=======================================================================");
+		    for(int i = 0; i < result.size(); i++){
+						System.out.printf("%-22s%-22s%-22s\n", result.get(i).get(0), result.get(i).get(1), result.get(i).get(2));
+			}
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -599,16 +607,33 @@ public class MechanicShop{
 	
 	public static void ListKCarsWithTheMostServices(MechanicShop esql){//9
 		//completed by CristinaL
-        //WIP
+
 		int k;
 
 		try{
 		    System.out.println("Enter the Highest Amount of Service Requests (Amount > 0):");
 			k = getInt();
+			
+			//REQUIRES INDEXING for perfomance increase	
+			String indexQuery = "CREATE INDEX serviceRequestCar_vin on service_request (car_vin);";
+			esql.executeUpdate(indexQuery);
 
-		    String query = "SELECT make, model, s.num FROM car AS c, (SELECT car_vin, COUNT(rid) AS num FROM service_request GROUP BY car_vin ) AS s WHERE s.car_vin = c.vin ORDER BY s.num DESC LIMIT";
-		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
-		    System.out.println(results);
+		    String query = "SELECT c.make, c.model, COUNT(r.rid) cnt " +
+		                    "FROM car c, service_request r " +
+		                    "WHERE c.vin = r.car_vin " +
+		                    "GROUP BY c.make, c.model " +
+		                    "ORDER BY cnt DESC " +
+		                    "LIMIT " + k + " ";
+			List<List<String>> result = esql.executeQueryAndReturnResult(query);
+			System.out.printf("%-22s%-22s%-22s\n", "Make", "Model", "Service Request");
+			System.out.println("=======================================================================");
+		    for(int i = 0; i < result.size(); i++){
+						System.out.printf("%-22s%-22s%-22s\n", result.get(i).get(0), result.get(i).get(1), result.get(i).get(2));
+			}
+			
+			indexQuery = "DROP INDEX serviceRequestCar_vin";
+			esql.executeUpdate(indexQuery);
+
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
@@ -616,15 +641,33 @@ public class MechanicShop{
 	
 	public static void ListCustomersInDescendingOrderOfTheirTotalBill(MechanicShop esql){//9
 		//completed by CristinaL
+
 	    try{
-	        String query = "SELECT c.fname, c.lname, r.bill " +
-	                        "FROM customer c, owns o, car v, closed_request r " +
-	                        "WHERE ";
-		    List<List<String>> results = esql.executeQueryAndReturnResult(query);
-		    System.out.println(results);
+			//REQUIRES INDEXING for perfomance increase	
+			String indexQuery = "CREATE INDEX serviceRequestID on service_request (rid);";
+			esql.executeUpdate(indexQuery);
+			//REQUIRES INDEXING for perfomance increase	
+			indexQuery = "CREATE INDEX closedRequestID on closed_request (rid);";
+			esql.executeUpdate(indexQuery);
+			
+	        String query = "SELECT c.fname, c.lname, SUM(r.bill) bill " +
+			"FROM customer c, owns o, car v, closed_request r, service_request s " +
+			"WHERE c.id = o.customer_id AND o.car_vin = v.vin AND v.vin = s.car_vin AND r.rid = s.rid " +
+			"GROUP BY c.fname, c.lname " +
+			"ORDER BY bill DESC ";
+			List<List<String>> result = esql.executeQueryAndReturnResult(query);
+			System.out.printf("%-22s%-22s%-22s\n", "FirstName", "LastName", "Total Bill");
+			System.out.println("=======================================================================");
+		    for(int i = 0; i < result.size(); i++){
+						System.out.printf("%-22s%-22s%-22s\n", result.get(i).get(0).trim(), result.get(i).get(1).trim(), result.get(i).get(2));
+			}
+			indexQuery = "DROP INDEX serviceRequestID";
+			esql.executeUpdate(indexQuery);
+			indexQuery = "DROP INDEX closedRequestID";
+			esql.executeUpdate(indexQuery);
+
         }catch(Exception e){
 			System.err.println (e.getMessage());
 		}
 	}
 }
-
