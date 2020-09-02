@@ -7,6 +7,11 @@ Database: PostgreSQL
 
 Language: Java
 
+## Schema
+
+![Schema](/img/schemaDesign.png)
+
+
 
 # Compilation Instructions
 
@@ -25,5 +30,5 @@ Language: Java
 3. Exit Server
     1. `cd code`
     2. `cd postgresql`
-    3. `./stopPostgreDB.sh`
+    3. `./stopPostgreDB.sh
 `
